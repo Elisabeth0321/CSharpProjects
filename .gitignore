@@ -28,3 +28,4 @@ CodeCoverage/
 TestResult.xml
 nunit-*.xml
 .idea/
+/1. Tracer/Tracer/.idea/

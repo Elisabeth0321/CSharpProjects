@@ -1,0 +1,125 @@
+<Window x:Class="DirectoryScanner.View.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:vm="clr-namespace:DirectoryScanner.View"
+        Title="Directory Scanner"
+        Height="520"
+        Width="900"
+        Background="#FFF4F7FB">
+
+    <Window.DataContext>
+        <vm:MainViewModel/>
+    </Window.DataContext>
+
+    <Window.Resources>
+        <BooleanToVisibilityConverter x:Key="BoolToVisibility"/>
+        <Style x:Key="RoundButtonStyle" TargetType="Button">
+            <Setter Property="Foreground" Value="#FF233142"/>
+            <Setter Property="Background" Value="#FFD9EAFD"/>
+            <Setter Property="Padding" Value="14,8"/>
+            <Setter Property="Margin" Value="0,0,12,0"/>
+            <Setter Property="BorderThickness" Value="0"/>
+            <Setter Property="FontWeight" Value="SemiBold"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border Background="{TemplateBinding Background}"
+                                CornerRadius="12">
+                            <ContentPresenter HorizontalAlignment="Center"
+                                              VerticalAlignment="Center"/>
+                        </Border>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+            <Style.Triggers>
+                <Trigger Property="IsMouseOver" Value="True">
+                    <Setter Property="Background" Value="#FFC5DEF9"/>
+                </Trigger>
+                <Trigger Property="IsPressed" Value="True">
+                    <Setter Property="Background" Value="#FFB7D3F5"/>
+                </Trigger>
+            </Style.Triggers>
+        </Style>
+        <Style x:Key="ExpandedTreeViewItemStyle" TargetType="TreeViewItem">
+            <Setter Property="IsExpanded" Value="True"/>
+        </Style>
+    </Window.Resources>
+
+    <Grid Margin="20">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="12"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+
+        <StackPanel Grid.Row="0" Orientation="Horizontal">
+            <Button Style="{StaticResource RoundButtonStyle}"
+                    Width="120"
+                    Content="Scan"
+                    Command="{Binding ScanCommand}"/>
+            <Button Style="{StaticResource RoundButtonStyle}"
+                    Width="120"
+                    Content="Cancel"
+                    Background="#FFFAD4D8"
+                    Command="{Binding CancelCommand}"/>
+        </StackPanel>
+
+        <StackPanel Grid.Row="1"
+                    Margin="0,8,0,0"
+                    Visibility="{Binding IsScanning, Converter={StaticResource BoolToVisibility}}">
+            <TextBlock Text="Scanning…"
+                       Foreground="#FF476A87"
+                       FontWeight="SemiBold"
+                       Margin="0,0,0,6"/>
+            <ProgressBar Height="6"
+                         IsIndeterminate="True"
+                         Foreground="#FF7EB6E8"
+                         Background="#FFE2EDFA"
+                         BorderThickness="0"/>
+        </StackPanel>
+
+        <Border Grid.Row="3"
+                Padding="12"
+                Background="#FFEAF3FF"
+                BorderBrush="#FFD5E6FA"
+                BorderThickness="1"
+                CornerRadius="14">
+            <TreeView ItemsSource="{Binding RootNodes}"
+                      Background="Transparent"
+                      BorderThickness="0"
+                      ItemContainerStyle="{StaticResource ExpandedTreeViewItemStyle}">
+                <TreeView.ItemTemplate>
+                    <HierarchicalDataTemplate ItemsSource="{Binding Children}"
+                                              ItemContainerStyle="{StaticResource ExpandedTreeViewItemStyle}">
+                        <StackPanel Orientation="Horizontal">
+                            <TextBlock Margin="0,0,8,0"
+                                       FontSize="14"
+                                       Foreground="#FF2F3E4D">
+                                <TextBlock.Style>
+                                    <Style TargetType="TextBlock">
+                                        <Setter Property="Text" Value="📄"/>
+                                        <Style.Triggers>
+                                            <DataTrigger Binding="{Binding IsDirectory}" Value="True">
+                                                <Setter Property="Text" Value="📁"/>
+                                            </DataTrigger>
+                                        </Style.Triggers>
+                                    </Style>
+                                </TextBlock.Style>
+                            </TextBlock>
+                            <TextBlock Text="{Binding Name}"
+                                       Margin="0,0,8,0"
+                                       FontWeight="SemiBold"
+                                       Foreground="#FF233142"/>
+                            <TextBlock Text="{Binding Size, StringFormat={}{0} bytes}"
+                                       Margin="0,0,8,0"
+                                       Foreground="#FF476A87"/>
+                            <TextBlock Text="{Binding Percentage, StringFormat={}{0:F2}%}"
+                                       Foreground="#FF6D87A0"/>
+                        </StackPanel>
+                    </HierarchicalDataTemplate>
+                </TreeView.ItemTemplate>
+            </TreeView>
+        </Border>
+    </Grid>
+</Window>

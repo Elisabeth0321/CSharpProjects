@@ -10,6 +10,7 @@ public class BasicTypesTests
         var faker = new Faker();
         int value = faker.Create<int>();
         Assert.True(value >= int.MinValue && value <= int.MaxValue);
+        Assert.True(typeof(decimal).IsValueType);
     }
 
     [Fact]

@@ -31,7 +31,6 @@ public class CollectionGenerator : IValueGenerator
         if (typeToGenerate.IsGenericType)
         {
             Type genericTypeDefinition = typeToGenerate.GetGenericTypeDefinition();
-            Type[] genericArguments = typeToGenerate.GetGenericArguments();
 
             if (genericTypeDefinition == typeof(List<>) ||
                 genericTypeDefinition == typeof(IList<>) ||

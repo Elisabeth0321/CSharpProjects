@@ -1,7 +1,7 @@
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 
-namespace TestGenerator.Core.Analysis;
+namespace TestGenerator.Core.Advanced;
 
 internal static class DefaultParameterValueSyntaxFactory
 {
